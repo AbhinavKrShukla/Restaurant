@@ -4,10 +4,15 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                @if(Session::has('message'))
+                    <div class="alert alert-success">
+                        {{Session::get('message')}}
+                    </div>
+                @endif
                 <form action="{{route('category.store')}}" method="post">
                     @csrf
                     <div class="card">
-                        <div class="card-header">{{ __('Dashboard') }}</div>
+                        <div class="card-header">{{ __('Create a New Category') }}</div>
                         <div class="card-body">
 
                             <div class="form-group mt-2 mb-3">
