@@ -37,6 +37,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->Validate($request, [
+            'name' => 'required',
+        ]);
         Category::create([
             'name' => $request->get('name'),
         ]);
@@ -58,11 +61,12 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function edit($id)
+    public function edit($category)
     {
-        //
+        $category = Category::find($category);
+        return view('category.edit', compact('category'));
     }
 
     /**
@@ -70,21 +74,30 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->Validate($request, [
+            'name' => 'required',
+        ]);
+        
+        $category = Category::find($id);
+        $category->name = $request->get('name');
+        $category->save();
+        return redirect()->route('category.index')->with('message', 'Category updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route('category.index')->with('message', 'Category deleted');
     }
 }
